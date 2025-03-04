@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Contraseñas Seguras</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Contraseñas Seguras</h1>
+        <div class="password-container">
+            <input type="text" id="password" readonly>
+            <button id="copy-btn">Copiar</button>
+        </div>
+        <div class="settings">
+            <label>Longitud: <span id="length-value">12</span></label>
+            <input type="range" id="length" min="8" max="32" value="12">
+            <label><input type="checkbox" id="uppercase" checked> Incluir Mayúsculas</label>
+            <label><input type="checkbox" id="lowercase" checked> Incluir Minúsculas</label>
+            <label><input type="checkbox" id="numbers" checked> Incluir Números</label>
+            <label><input type="checkbox" id="symbols" checked> Incluir Símbolos</label>
+        </div>
+        <button id="generate">Generar Contraseña</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const passwordField = document.getElementById("password");
+            const lengthSlider = document.getElementById("length");
+            const lengthValue = document.getElementById("length-value");
+            const uppercaseCheck = document.getElementById("uppercase");
+            const lowercaseCheck = document.getElementById("lowercase");
+            const numbersCheck = document.getElementById("numbers");
+            const symbolsCheck = document.getElementById("symbols");
+            const generateBtn = document.getElementById("generate");
+            const copyBtn = document.getElementById("copy-btn");
+
+            const characters = {
+                uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                lowercase: "abcdefghijklmnopqrstuvwxyz",
+                numbers: "0123456789",
+                symbols: "!@#$%^&*()_+[]{}|;:,.<>?/"
+            };
+
+            function generatePassword() {
+                let charPool = "";
+                if (uppercaseCheck.checked) charPool += characters.uppercase;
+                if (lowercaseCheck.checked) charPool += characters.lowercase;
+                if (numbersCheck.checked) charPool += characters.numbers;
+                if (symbolsCheck.checked) charPool += characters.symbols;
+                
+                let password = "";
+                for (let i = 0; i < lengthSlider.value; i++) {
+                    password += charPool.charAt(Math.floor(Math.random() * charPool.length));
+                }
+                passwordField.value = password;
+            }
+
+            lengthSlider.addEventListener("input", () => {
+                lengthValue.textContent = lengthSlider.value;
+            });
+
+            generateBtn.addEventListener("click", generatePassword);
+
+            copyBtn.addEventListener("click", () => {
+                passwordField.select();
+                document.execCommand("copy");
+                alert("Contraseña copiada al portapapeles");
+            });
+        });
+    </script>
+</body>
+</html>
